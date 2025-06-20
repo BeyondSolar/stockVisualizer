@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
   res.send('Stock Visualizer API is running');
 });
 
-app.listen(process.env.PORT, () => {
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
-
