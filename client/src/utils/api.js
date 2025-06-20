@@ -1,8 +1,11 @@
 import axios from 'axios';
 
-//authorization api
+const baseURL = process.env.REACT_APP_API_URL;
+console.log('🔍 API BASE URL:', baseURL);
+
+// authorization api
 const AUTH_API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL+'/auth',
+  baseURL: `${baseURL}/auth`,
 });
 
 export const login = (email, password) =>
@@ -11,27 +14,22 @@ export const login = (email, password) =>
 export const register = (username, email, password) =>
   AUTH_API.post('/register', { username, email, password });
 
-
-
-//stock fetch api
+// stock fetch api
 const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL+'/stock', // backend URL
+  baseURL: `${baseURL}/stock`,
 });
 
 export const getQuote = (symbol) => API.get(`/quote/${symbol}`);
 export const getHistory = (symbol) => API.get(`/history/${symbol}`);
 
-
-
-
-//stock update api
+// stock update api
 const STOCK_API = axios.create({
-    baseURL: process.env.REACT_APP_API_URL+'/stock',
-})
+  baseURL: `${baseURL}/stock`,
+});
 
 export const saveStock = (symbol, token) =>
   STOCK_API.post('/save', { symbol }, {
-    headers: { Authorization: `Bearer ${token}` } ,
+    headers: { Authorization: `Bearer ${token}` },
   });
 
 export const getSavedStocks = (token) =>
@@ -43,4 +41,3 @@ export const deleteStock = (stockId, token) =>
   STOCK_API.delete(`/${stockId}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
-
