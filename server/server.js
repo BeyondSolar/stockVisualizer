@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 5000;
 
 // Allow frontend origin
 app.use(cors({
-  origin: 'https://stockvisualizer-frontend.onrender.com',
+  origin: 'https://stock-visualizer-frontend-nine.vercel.app/',
   credentials: true
 }));
 app.use(express.json());
