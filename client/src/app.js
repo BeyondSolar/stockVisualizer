@@ -6,6 +6,8 @@ import PrivateRoute from './components/PrivateRoute';
 import UserProfile from './pages/UserProfile';
 
 function App() {
+  console.log("REACT_APP_API_URL", process.env.REACT_APP_API_URL);
+
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
