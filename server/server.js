@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 5000;
 
 // Allow frontend origin
 app.use(cors({
-  origin: 'https://stockvisualizer-frontend.onrender.com/', // or whatever port your React app runs on
+  origin: ['http://localhost:3000', 'https://your-frontend.onrender.com'],
   credentials: true
 }));
 app.use(express.json());
