@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 5000;
 
 // Allow frontend origin
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://your-frontend.onrender.com'],
+  origin: ['http://localhost:3000', 'https://stockvisualizer-frontend.onrender.com'],
   credentials: true
 }));
 app.use(express.json());
