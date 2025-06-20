@@ -5,8 +5,10 @@ const AUTH_API = axios.create({
   baseURL: process.env.REACT_APP_API_URL+'/auth',
 });
 
-export const login = (email, password) =>
+export const login = (email, password) =>{
+  console.log('API:', process.env.REACT_APP_API_URL);
   AUTH_API.post('/login', { email, password });
+}
 
 export const register = (username, email, password) =>
   AUTH_API.post('/register', { username, email, password });
