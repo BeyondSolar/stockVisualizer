@@ -185,3 +185,29 @@ exports.deleteStock = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+
+// Route: GET /api/stock/holdings/:symbol
+exports.getStockHolding = async (req, res) => {
+  const { symbol } = req.params;
+  const userId = req.user.id;
+
+  try {
+    const transactions = await Transaction.find({ userId, symbol });
+
+    const totalBuy = transactions
+      .filter(tx => tx.type === 'buy')
+      .reduce((sum, tx) => sum + tx.quantity, 0);
+
+    const totalSell = transactions
+      .filter(tx => tx.type === 'sell')
+      .reduce((sum, tx) => sum + tx.quantity, 0);
+
+    const quantity = totalBuy - totalSell;
+
+    res.json({ symbol, quantity });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to get holdings' });
+  }
+};
