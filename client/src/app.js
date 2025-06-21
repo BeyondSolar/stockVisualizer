@@ -5,6 +5,7 @@ import Register from './pages/Register';
 import Dashboard from './components/Dashboard';
 import Portfolio from './components/Portfolio';
 import Market from './components/Market';
+import Profile from './components/Profile';
 
 const AppRoutes = () => (
   <Routes>
@@ -15,6 +16,7 @@ const AppRoutes = () => (
       <Route index element={<Dashboard />} />
       <Route path="/portfolio" element={<Portfolio />} />
       <Route path="/market" element={<Market />} />
+      <Route path="/profile" element={<Profile />} />
     </Route>
   </Routes>
 );

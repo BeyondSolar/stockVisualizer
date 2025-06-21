@@ -39,6 +39,7 @@ mongoose.connect(process.env.MONGO_URI, {
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/stock', require('./routes/stockRoutes'));
 app.use('/api/transact', require('./routes/transactRoutes'));
+app.use('/api/user', require('./routes/userRoutes'));
 
 app.get('/', (req, res) => {
   res.send('Stock Visualizer API is running');
