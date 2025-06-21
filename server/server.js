@@ -5,10 +5,21 @@ const mongoose = require('mongoose');
 
 dotenv.config();
 const app = express();
+const PORT = process.env.PORT || 5000;
 
-// Allow frontend origin
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  'http://localhost:3000'
+];
+
 app.use(cors({
-  origin: 'https://stock-visualizer-frontend-nine.vercel.app',
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 
@@ -33,7 +44,6 @@ app.get('/', (req, res) => {
   res.send('Stock Visualizer API is running');
 });
 
-const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
