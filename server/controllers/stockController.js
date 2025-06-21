@@ -115,7 +115,7 @@ exports.getStockHistory = async (req, res) => {
 
 // display some stocks on the trade page
 exports.getMarketStocks = async (req, res) => {
-  const symbols = ['AAPL', 'TSLA', 'GOOGL', 'AMZN', 'MSFT', 'META', 'NVDA'];
+  const symbols = ['AAPL', 'TSLA', 'GOOGL', 'AMZN', 'MSFT'];
   const stockData = [];
 
   try {

@@ -4,8 +4,8 @@ const { getStockQuote, getStockHistory, getMarketStocks } = require('../controll
 const auth = require('../middleware/authJWT')
 
 //stock data api
-router.get('/quote/:symbol', auth, getStockQuote);        // e.g., /api/stock/quote/AAPL
-router.get('/history/:symbol', auth, getStockHistory);    // e.g., /api/stock/history/AAPL?range=1month
+router.get('/quote/:symbol', getStockQuote);        // e.g., /api/stock/quote/AAPL
+router.get('/history/:symbol', getStockHistory);    // e.g., /api/stock/history/AAPL?range=1month
 router.get('/market', auth, getMarketStocks);
 
 
