@@ -1,5 +1,6 @@
 const axios = require('axios');
 const Stock = require('../models/Stock');
+const Transaction = require('../models/Transactions')
 
 const TIINGO_API_KEY = process.env.TIINGO_API_KEY;
 
