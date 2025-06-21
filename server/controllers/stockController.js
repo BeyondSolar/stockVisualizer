@@ -3,6 +3,23 @@ const Stock = require('../models/Stock');
 
 const TIINGO_API_KEY = process.env.TIINGO_API_KEY;
 
+// Get current price
+exports.getCurrentPrice = async (symbol) => {
+  try {
+    const res = await axios.get(`https://api.tiingo.com/tiingo/daily/${symbol}/prices`, {
+      headers: {
+        'Authorization': `Token ${process.env.TIINGO_API_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    return res.data[0]?.close || 0;
+  } catch (err) {
+    console.error(`Error fetching price for ${symbol}:`, err.message);
+    return 0;
+  }
+};
+
 // Get latest stock quote from Tiingo
 exports.getStockQuote = async (req, res) => {
   const { symbol } = req.params;
@@ -95,6 +112,36 @@ exports.getStockHistory = async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch stock history' });
   }
 };
+
+// display some stocks on the trade page
+exports.getMarketStocks = async (req, res) => {
+  const symbols = ['AAPL', 'TSLA', 'GOOGL', 'AMZN', 'MSFT', 'META', 'NVDA', 'NFLX', 'BABA', 'INTC'];
+  const stockData = [];
+
+  try {
+    for (let symbol of symbols) {
+      const response = await axios.get(`https://api.tiingo.com/tiingo/daily/${symbol}/prices`, {
+        headers: {
+          'Authorization': `Token ${TIINGO_API_KEY}`
+        }
+      });
+
+      const data = response.data[0];
+      stockData.push({
+        symbol,
+        name: symbol,
+        price: data.close,
+        date: data.date
+      });
+    }
+
+    res.json(stockData);
+  } catch (err) {
+    console.error('Error fetching market stocks:', err.message);
+    res.status(500).json({ error: 'Failed to fetch stock data' });
+  }
+};
+
 
 // Save a stock for the authenticated user
 exports.saveStock = async (req, res) => {
