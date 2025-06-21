@@ -115,14 +115,17 @@ exports.getStockHistory = async (req, res) => {
 
 // display some stocks on the trade page
 exports.getMarketStocks = async (req, res) => {
-  const symbols = ['AAPL', 'TSLA', 'GOOGL', 'AMZN', 'MSFT', 'META', 'NVDA', 'NFLX', 'BABA', 'INTC'];
+  const symbols = ['AAPL', 'TSLA', 'GOOGL', 'AMZN', 'MSFT', 'META', 'NVDA'];
   const stockData = [];
 
   try {
     for (let symbol of symbols) {
+      await new Promise(resolve => setTimeout(resolve, 20)); // delay between requests
+
       const response = await axios.get(`https://api.tiingo.com/tiingo/daily/${symbol}/prices`, {
         headers: {
-          'Authorization': `Token ${TIINGO_API_KEY}`
+          Authorization: `Token ${process.env.TIINGO_API_KEY}`,
+          'Content-Type': 'application/json',
         }
       });
 
@@ -131,13 +134,13 @@ exports.getMarketStocks = async (req, res) => {
         symbol,
         name: symbol,
         price: data.close,
-        date: data.date
+        date: data.date,
       });
     }
 
     res.json(stockData);
   } catch (err) {
-    console.error('Error fetching market stocks:', err.message);
+    console.error('Error fetching market stocks:', err.response?.data || err.message);
     res.status(500).json({ error: 'Failed to fetch stock data' });
   }
 };
