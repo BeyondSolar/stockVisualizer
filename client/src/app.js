@@ -1,23 +1,22 @@
 import { Routes, Route } from 'react-router-dom';
-import Hero from './pages/Hero';
+import Layout from './layouts/Layout';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import PrivateRoute from './components/PrivateRoute';
-import UserProfile from './pages/UserProfile';
+import Dashboard from './components/Dashboard';
+import Portfolio from './components/Portfolio';
+import Market from './components/Market';
 
-function App() {
+const AppRoutes = () => (
+  <Routes>
+    <Route path="/login" element={<Login />} />
+    <Route path="/register" element={<Register />} />
 
-  return (
-    <div className="min-h-screen bg-orange-100">
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />     
-        <Route path="/profile" element={ <PrivateRoute><UserProfile /></PrivateRoute>} />
-        <Route path="/" element={<PrivateRoute><Hero /></PrivateRoute>} />
-      </Routes>
-    </div>
-    
-  );
-}
+    <Route path="/" element={<Layout />}>
+      <Route index element={<Dashboard />} />
+      <Route path="/portfolio" element={<Portfolio />} />
+      <Route path="/market" element={<Market />} />
+    </Route>
+  </Routes>
+);
 
-export default App;
+export default AppRoutes;

@@ -1,11 +1,21 @@
-import React, { createContext, useState } from 'react';
-import { login as loginAPI, register as registerAPI } from '../utils/api';
+import React, { createContext, useState, useEffect } from 'react';
+import { login as loginAPI, register as registerAPI } from '../utils/authService';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user')) || null);
-  const [token, setToken] = useState(() => localStorage.getItem('token') || null);
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    const storedToken = localStorage.getItem('token');
+
+    if (storedUser && storedToken) {
+      setUser(storedUser);
+      setToken(storedToken);
+    }
+  }, []);
 
   const login = async (email, password) => {
     try {
