@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/authContext';
-import { getSavedStocks } from '../utils/stockService';
-import { getWallet, resetWallet } from '../utils/userService'; // ✅ Use both services
+import { getSavedStocks, deleteStock } from '../utils/stockService';
+import { getWallet, resetWallet } from '../utils/userService';
 import { useNavigate } from 'react-router-dom';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 
 const Profile = () => {
-  const { token, user } = useAuth();
+  const { token } = useAuth();
   const [wallet, setWallet] = useState(null);
   const [savedStocks, setSavedStocks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,7 +18,7 @@ const Profile = () => {
         const savedRes = await getSavedStocks(token);
         setSavedStocks(savedRes.data);
 
-        const walletRes = await getWallet(token); // ✅ Using the service
+        const walletRes = await getWallet(token);
         setWallet(walletRes.data.wallet);
       } catch (err) {
         console.error('Profile load error:', err);
@@ -31,11 +32,21 @@ const Profile = () => {
 
   const handleResetWallet = async () => {
     try {
-      const res = await resetWallet(token); // ✅ Already using service
+      const res = await resetWallet(token);
       setWallet(res.data.wallet);
       alert('Wallet reset successful');
     } catch (err) {
       alert(err.response?.data?.message || 'Failed to reset wallet');
+    }
+  };
+
+  const handleDelete = async (stockId) => {
+    try {
+      await deleteStock(stockId, token);
+      setSavedStocks(prev => prev.filter(stock => stock._id !== stockId));
+    } catch (err) {
+      console.error('Failed to delete stock:', err);
+      alert('Delete failed');
     }
   };
 
@@ -53,10 +64,21 @@ const Profile = () => {
             savedStocks.map((stock) => (
               <li
                 key={stock._id}
-                className="cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 p-3 rounded transition"
-                onClick={() => navigate('/market', { state: { symbol: stock.symbol } })}
+                className="flex justify-between items-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 p-3 rounded transition"
               >
-                {stock.symbol}
+                <span
+                  className="cursor-pointer font-medium"
+                  onClick={() => navigate('/market', { state: { symbol: stock.symbol } })}
+                >
+                  {stock.symbol}
+                </span>
+                <button
+                  onClick={() => handleDelete(stock._id)}
+                  className="text-red-500 hover:text-red-700 transition"
+                  title="Delete"
+                >
+                  <XMarkIcon className="h-5 w-5" />
+                </button>
               </li>
             ))
           )}

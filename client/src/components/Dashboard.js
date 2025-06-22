@@ -52,7 +52,7 @@ const Dashboard = () => {
               <li
                 key={stock._id}
                 onClick={() => navigate('/market', { state: { symbol: stock.symbol } })}
-                className="bg-white dark:bg-gray-800 p-4 rounded shadow text-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+                className="bg-white dark:bg-gray-800 text-white p-4 rounded shadow text-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition"
               >
                 {stock.symbol}
               </li>
