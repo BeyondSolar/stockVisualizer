@@ -157,7 +157,7 @@ exports.getPortfolioSummary = async (req, res) => {
 
 
 // GET: /api/transact/getTransactions
-exports.getTransactionsByDate = async (req, res) => {
+exports.getTransactions = async (req, res) => {
   try {
     const userId = req.user.id;
     let { startDate, endDate } = req.query;

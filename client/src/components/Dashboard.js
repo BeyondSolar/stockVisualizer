@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useAuth } from '../context/authContext';
+import { useNavigate } from 'react-router-dom';
 import { getSavedStocks, getMarketStocks } from '../utils/stockService';
 import { getPortfolioSummary } from '../utils/transactionService';
-import { useAuth } from '../context/authContext';
 
 const Dashboard = () => {
   const { token } = useAuth();
+  const navigate = useNavigate();
   const [saved, setSaved] = useState([]);
   const [market, setMarket] = useState([]);
   const [summary, setSummary] = useState(null);
@@ -21,7 +23,7 @@ const Dashboard = () => {
 
         setSaved(savedRes.data);
         setMarket(marketRes.data);
-        setSummary(summaryRes.data?.summary || null); // Defensive handling
+        setSummary(summaryRes.data?.summary || null);
       } catch (err) {
         console.error('Dashboard error:', err);
       } finally {
@@ -35,25 +37,55 @@ const Dashboard = () => {
   if (loading) return <div className="text-center mt-10 text-white">Loading...</div>;
 
   return (
-    <div className="space-y-8">
-      {/* Section: Market Overview */}
+    <div className="space-y-8 p-6">
+      {/* Saved Stocks Section */}
       <section>
-        <h2 className="text-2xl font-bold mb-4 text-white">📊 Market Overview</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {market.map((item) => (
-            <div
-              key={item.symbol}
-              className="bg-white dark:bg-gray-800 p-4 rounded shadow text-center"
-            >
-              <h3 className="font-bold text-lg text-gray-900 dark:text-white">{item.symbol}</h3>
-              <p className="text-green-600 font-semibold">₹{item.price}</p>
-              <p className="text-sm text-gray-500">{new Date(item.date).toLocaleDateString()}</p>
-            </div>
-          ))}
-        </div>
+        <h2 className="text-2xl font-bold mb-4 text-white">📌 Saved Stocks</h2>
+
+        {saved.length === 0 ? (
+          <div className="bg-blue-100 text-blue-800 p-4 rounded">
+            💡 You haven’t saved any stocks yet. Visit the <strong>Market</strong> page to save your favorites.
+          </div>
+        ) : (
+          <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {saved.map((stock) => (
+              <li
+                key={stock._id}
+                onClick={() => navigate('/market', { state: { symbol: stock.symbol } })}
+                className="bg-white dark:bg-gray-800 p-4 rounded shadow text-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+              >
+                {stock.symbol}
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
 
-      {/* Section: Profit/Loss Summary */}
+      {/* Market Overview */}
+      <section>
+        <h2 className="text-2xl font-bold mb-4 text-white">📊 Market Overview</h2>
+
+        {market.length === 0 ? (
+          <div className="bg-yellow-100 text-yellow-800 p-4 rounded">
+            ⚠️ No market data available right now. Try saving some stocks or check back later.
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {market.map((item) => (
+              <div
+                key={item.symbol}
+                className="bg-white dark:bg-gray-800 p-4 rounded shadow text-center"
+              >
+                <h3 className="font-bold text-lg text-gray-900 dark:text-white">{item.symbol}</h3>
+                <p className="text-green-600 font-semibold">₹{item.price}</p>
+                <p className="text-sm text-gray-500">{new Date(item.date).toLocaleDateString()}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Portfolio Summary */}
       <section>
         <h2 className="text-2xl font-bold mb-4 text-white">📈 Portfolio Summary</h2>
 

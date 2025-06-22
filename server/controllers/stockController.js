@@ -94,8 +94,7 @@ exports.getStockHistory = async (req, res) => {
     if (!response.data || response.data.length === 0) {
       return res.status(404).json({ error: 'No historical data found' });
     }
-
-    // Format to similar structure as Alpha Vantage if you want, else send raw data
+    
     const formattedData = {};
     response.data.forEach(day => {
       formattedData[day.date.split('T')[0]] = {
@@ -114,14 +113,21 @@ exports.getStockHistory = async (req, res) => {
   }
 };
 
-// display some stocks on the trade page
 exports.getMarketStocks = async (req, res) => {
-  const symbols = ['AAPL', 'TSLA', 'GOOGL', 'AMZN', 'MSFT'];
-  const stockData = [];
+  const userId = req.user.id;
 
   try {
+    const savedStocks = await Stock.find({ userId });
+    const symbols = savedStocks.map(stock => stock.symbol);
+
+    if (symbols.length === 0) {
+      return res.status(200).json([]); // No saved stocks
+    }
+
+    const stockData = [];
+
     for (let symbol of symbols) {
-      await new Promise(resolve => setTimeout(resolve, 20)); // delay between requests
+      await new Promise(resolve => setTimeout(resolve, 20)); // delay to avoid rate limits
 
       const response = await axios.get(`https://api.tiingo.com/tiingo/daily/${symbol}/prices`, {
         headers: {
@@ -141,10 +147,11 @@ exports.getMarketStocks = async (req, res) => {
 
     res.json(stockData);
   } catch (err) {
-    console.error('Error fetching market stocks:', err.response?.data || err.message);
-    res.status(500).json({ error: 'Failed to fetch stock data' });
+    console.error('Error fetching user saved stocks:', err.response?.data || err.message);
+    res.status(500).json({ error: 'Failed to fetch saved stock data' });
   }
 };
+
 
 
 // Save a stock for the authenticated user
