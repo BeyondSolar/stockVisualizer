@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/authContext';
 import { getSavedStocks } from '../utils/stockService';
-import { resetWallet } from '../utils/userService';
+import { getWallet, resetWallet } from '../utils/userService'; // ✅ Use both services
 import { useNavigate } from 'react-router-dom';
-import API from '../utils/apiClient';
 
 const Profile = () => {
   const { token, user } = useAuth();
@@ -12,17 +11,14 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Fetch wallet and saved stocks
   useEffect(() => {
     const fetchData = async () => {
       try {
         const savedRes = await getSavedStocks(token);
         setSavedStocks(savedRes.data);
 
-        const userRes = await API.get('/user/me', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setWallet(userRes.data.wallet);
+        const walletRes = await getWallet(token); // ✅ Using the service
+        setWallet(walletRes.data.wallet);
       } catch (err) {
         console.error('Profile load error:', err);
       } finally {
@@ -35,7 +31,7 @@ const Profile = () => {
 
   const handleResetWallet = async () => {
     try {
-      const res = await resetWallet(token);
+      const res = await resetWallet(token); // ✅ Already using service
       setWallet(res.data.wallet);
       alert('Wallet reset successful');
     } catch (err) {
@@ -71,7 +67,9 @@ const Profile = () => {
       <div className="bg-white dark:bg-gray-800 p-6 rounded shadow text-gray-900 dark:text-white flex flex-col justify-between">
         <div>
           <h2 className="text-2xl font-bold mb-4">💰 Wallet Balance</h2>
-          <p className="text-3xl font-bold text-green-600 dark:text-green-400">₹{wallet?.toFixed(2)}</p>
+          <p className="text-3xl font-bold text-green-600 dark:text-green-400">
+            ₹{wallet?.toFixed(2)}
+          </p>
         </div>
         <button
           onClick={handleResetWallet}
