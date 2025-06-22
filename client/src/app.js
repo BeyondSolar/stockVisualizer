@@ -14,14 +14,18 @@ const AppRoutes = () => (
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
 
-    <Route element={<PrivateRoute />}>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="/portfolio" element={<Portfolio />} />
-          <Route path="/market" element={<Market />} />
-          <Route path="/transactions" element={<Transactions />} />
-          <Route path="/profile" element={<Profile />} />
-        </Route>
+    <Route path="/"
+      element={
+        <PrivateRoute>
+          <Layout />
+        </PrivateRoute>
+      }
+    >
+      <Route index element={<Dashboard />} />
+      <Route path="portfolio" element={<Portfolio />} />
+      <Route path="market" element={<Market />} />
+      <Route path="transactions" element={<Transactions />} />
+      <Route path="profile" element={<Profile />} />
     </Route>
   </Routes>
 );
