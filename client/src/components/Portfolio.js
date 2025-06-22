@@ -35,23 +35,8 @@ const Portfolio = () => {
 
   return (
     <div className="space-y-8">
-      {/* Section 1: Saved Stocks */}
-      <section>
-        <h2 className="text-2xl font-bold mb-4 text-white">📌 Saved Stocks</h2>
-        {saved.length === 0 ? (
-          <p className="text-gray-300">No saved stocks yet.</p>
-        ) : (
-          <ul className="bg-white dark:bg-gray-800 rounded-md shadow divide-y divide-gray-200 dark:divide-gray-700">
-            {saved.map((stock) => (
-              <li key={stock._id} className="p-4 text-gray-900 dark:text-white">
-                {stock.symbol}
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-
-      {/* Section 2: Investment Breakdown */}
+      
+      {/* Section 1: Investment Breakdown */}
       <section>
         <h2 className="text-2xl font-bold mb-4 text-white">💼 Investment Breakdown</h2>
 

@@ -4,6 +4,7 @@ import {
   HomeIcon,
   ChartBarIcon,
   UserIcon,
+  ArrowsUpDownIcon, 
   CurrencyDollarIcon,
 } from '@heroicons/react/24/outline';
 
@@ -12,6 +13,7 @@ const Sidebar = () => {
     { name: 'Dashboard', path: '/', icon: <HomeIcon className="w-6 h-6" /> },
     { name: 'Market', path: '/market', icon: <ChartBarIcon className="w-6 h-6" /> },
     { name: 'Portfolio', path: '/portfolio', icon: <CurrencyDollarIcon className="w-6 h-6" /> },
+    { name: 'Transactions', path: '/transactions', icon: <ArrowsUpDownIcon  className="w-6 h-6" /> },
     { name: 'Profile', path: '/profile', icon: <UserIcon className="w-6 h-6" /> },
   ];
 

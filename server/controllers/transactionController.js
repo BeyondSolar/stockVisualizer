@@ -154,3 +154,36 @@ exports.getPortfolioSummary = async (req, res) => {
     res.status(500).json({ message: 'Failed to compute portfolio data' });
   }
 };
+
+
+// GET: /api/transact/getTransactions
+exports.getTransactionsByDate = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    let { startDate, endDate } = req.query;
+
+    const now = new Date();
+
+    if (!startDate || !endDate) {
+      // Default: last 10 days
+      endDate = now;
+      startDate = new Date(now);
+      startDate.setDate(now.getDate() - 10);
+    } else {
+      // Convert to Date objects if provided
+      startDate = new Date(startDate);
+      endDate = new Date(endDate);
+    }
+
+    const transactions = await Transaction.find({
+      userId,
+      timestamp: { $gte: startDate, $lte: endDate },
+    }).sort({ timestamp: -1 });
+
+    res.json(transactions);
+  } catch (err) {
+    console.error('Date filter error:', err.message);
+    res.status(500).json({ message: 'Failed to fetch filtered transactions' });
+  }
+};
+

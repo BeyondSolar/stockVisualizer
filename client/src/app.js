@@ -6,6 +6,7 @@ import Dashboard from './components/Dashboard';
 import Portfolio from './components/Portfolio';
 import Market from './components/Market';
 import Profile from './components/Profile';
+import Transactions from './components/Transactions';
 
 const AppRoutes = () => (
   <Routes>
@@ -16,6 +17,7 @@ const AppRoutes = () => (
       <Route index element={<Dashboard />} />
       <Route path="/portfolio" element={<Portfolio />} />
       <Route path="/market" element={<Market />} />
+      <Route path="/transactions" element={<Transactions />} />
       <Route path="/profile" element={<Profile />} />
     </Route>
   </Routes>
