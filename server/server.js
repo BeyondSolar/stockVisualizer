@@ -8,9 +8,10 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = [
-  process.env.CLIENT_URL,
+  'https://stock-visualizer-two.vercel.app',
   'http://localhost:3000'
 ];
+
 
 console.log('Allowed origins:', allowedOrigins);
 
